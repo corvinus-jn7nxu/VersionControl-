@@ -35,6 +35,7 @@ namespace UserMaintenance
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnWrite = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listUsers
@@ -80,14 +81,22 @@ namespace UserMaintenance
             this.btnWrite.UseVisualStyleBackColor = true;
             this.btnWrite.Click += new System.EventHandler(this.btnWrite_Click);
             // 
-            // saveFileDialog1
+            // btnDelete
             // 
+            this.btnDelete.Location = new System.Drawing.Point(255, 236);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(234, 47);
+            this.btnDelete.TabIndex = 7;
+            this.btnDelete.Text = "button1";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(498, 288);
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnWrite);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.txtFullName);
@@ -108,6 +117,7 @@ namespace UserMaintenance
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnWrite;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button btnDelete;
     }
 }
 

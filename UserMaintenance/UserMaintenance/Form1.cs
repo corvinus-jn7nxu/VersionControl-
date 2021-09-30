@@ -21,6 +21,7 @@ namespace UserMaintenance
             lblFullName.Text = Resource1.FullName; 
             btnAdd.Text = Resource1.Add;
             btnWrite.Text = Resource1.Write;
+            btnDelete.Text = Resource1.Delete;
             listUsers.DataSource = users;
             listUsers.ValueMember = "ID";
             listUsers.DisplayMember = "FullName";
@@ -54,6 +55,19 @@ namespace UserMaintenance
             
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            var torlendoFN = ((User)listUsers.SelectedItem).FullName;
+            var torlendoID = ((User)listUsers.SelectedItem).ID;
 
+            IReadOnlyList<User> usersToRemove = users.Where(x => (x.ID == torlendoID)).
+                                             ToList();
+
+            foreach (User asd in usersToRemove)
+            {
+                    users.Remove(asd);                             
+            }
+ 
+        }
     }
 }
