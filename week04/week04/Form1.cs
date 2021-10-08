@@ -24,6 +24,7 @@ namespace week04
         {
             InitializeComponent();
             LoadData();
+            CreateExcel();
         }
         private void LoadData()
         {
@@ -40,11 +41,11 @@ namespace week04
                 xlWB = xlApp.Workbooks.Add(Missing.Value); //új munkafüzet
 
                 xlSheet = xlWB.ActiveSheet; // Új munkalap
-
-                //CreateTAble();
-
                 xlApp.Visible = true;
                 xlApp.UserControl = true;
+                CreateTable();
+
+                
             }
             catch (Exception ex)
             {
@@ -59,5 +60,74 @@ namespace week04
             }
         
         }
+
+        private void CreateTable()
+        {
+            string[] headers = new string[] {
+                 "Kód",
+                 "Eladó",
+                 "Oldal",
+                 "Kerület",
+                 "Lift",
+                 "Szobák száma",
+                 "Alapterület (m2)",
+                 "Ár (mFt)",
+                 "Négyzetméter ár (Ft/m2)"};
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                xlSheet.Cells[ 1, 1 + i] = headers[i];
+            }
+
+            object[,] values = new object[Flats.Count, headers.Length];
+            int counter = 0;
+            foreach (Flat item in Flats)
+            {
+                values[counter, 0] = item.Code;
+                values[counter, 1] = item.Vendor;
+                values[counter, 2] = item.Side;
+                values[counter, 3] = item.District;
+                if (item.Elevator)
+                {
+                    values[counter, 4] = "Van";
+                }
+                else
+                {
+                    values[counter, 4] = "Nincs";
+                }               
+                values[counter, 5] = item.NumberOfRooms;
+                values[counter, 6] = item.FloorArea;
+                values[counter, 7] = item.Price;
+                values[counter, 8] = "";
+                
+                string Fnct = "=" + GetCell(counter + 2, 8) + "/" + GetCell(counter + 2, 7);
+                xlSheet.Cells[counter + 2, 9] = Fnct;
+                //xlSheet.get_Range(GetCell)
+                counter++;
+            }
+
+            xlSheet.get_Range(
+            GetCell(2, 1),
+            GetCell(1 + values.GetLength(0), values.GetLength(1)-1)).Value2 = values;
+
+        }
+        private string GetCell(int x, int y)
+        {
+            string ExcelCoordinate = "";
+            int dividend = y;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+            ExcelCoordinate += x.ToString();
+
+            return ExcelCoordinate;
+        }
+
+
     }
 }
