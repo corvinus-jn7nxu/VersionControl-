@@ -62,8 +62,11 @@ namespace UserMaintenance
 
             IReadOnlyList<User> usersToRemove = users.Where(x => (x.ID == torlendoID)).
                                              ToList();
+            var TorlendoUserek = from x in users
+                                 where x.ID == torlendoID
+                                 select x;
 
-            foreach (User asd in usersToRemove)
+            foreach (User asd in TorlendoUserek.ToList())
             {
                     users.Remove(asd);                             
             }
