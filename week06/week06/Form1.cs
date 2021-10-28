@@ -21,8 +21,43 @@ namespace week06
         public Form1()
         {
             InitializeComponent();
+            _getCurr();
             comboBox1.DataSource = Currencies;
+            //comboBox1.DisplayMember = "Currency";
             RefreshData();
+        }
+        string _getCurr()
+        {
+            var mnbService = new MNBArfolyamServiceSoapClient();
+            var request = new GetCurrenciesRequestBody()
+            {
+            };
+            var response = mnbService.GetCurrencies(request);
+            var Currresult = response.GetCurrenciesResult;
+            Console.WriteLine(Currresult);
+            //XMLProcessing(result);
+            return Currresult;
+        }
+
+        void CurrXMLProcessing(string result)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(result);
+            var itemC = xml.DocumentElement;
+            var childElement = (XmlElement)itemC.ChildNodes[0];
+            foreach (XmlElement item in childElement)
+            {
+                string curr;
+                
+                //rd.Date = DateTime.Parse(item.GetAttribute("date"));
+                //var childElement = (XmlElement)item.ChildNodes[0];
+                if (childElement == null)
+                    continue;
+                //curr = childElement.GetAttribute("curr");
+                curr = item.InnerText;
+                Currencies.Add(curr);
+
+            }
         }
 
         string CallService()
@@ -41,6 +76,8 @@ namespace week06
             //XMLProcessing(result);
             return result;
         }
+
+
         void XMLProcessing(string result)
         {
             XmlDocument xml = new XmlDocument();
@@ -51,6 +88,8 @@ namespace week06
                 Rates.Add(rd);
                 rd.Date = DateTime.Parse(item.GetAttribute("date"));
                 var childElement = (XmlElement)item.ChildNodes[0];
+                if (childElement == null)
+                    continue;
                 rd.Currency = childElement.GetAttribute("curr");
 
                 // Érték
@@ -84,7 +123,9 @@ namespace week06
             Rates.Clear();
             dataGridView1.DataSource = Rates;
             var asd = CallService();
+            var Curr = _getCurr();
             XMLProcessing(asd);
+            CurrXMLProcessing(Curr);
             Graph();
         }
 
