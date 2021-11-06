@@ -40,9 +40,9 @@ namespace week08
         private void conveyorTimer_Tick(object sender, EventArgs e)
         {
             var Position = 0;
-            foreach (Ball item in _balls)
+            foreach (var item in _balls)
             {
-                item.MoveBall();
+                item.MoveToy();
                 if (Position < item.Left)
                 {
                     Position = item.Left;
