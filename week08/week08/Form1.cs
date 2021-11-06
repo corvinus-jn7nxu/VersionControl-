@@ -92,7 +92,7 @@ namespace week08
             Controls.Add(_nextToy);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void ColorChoosebutton_Click(object sender, EventArgs e)
         {
             var button = (Button)sender;
             var cd = new ColorDialog();
@@ -103,6 +103,15 @@ namespace week08
                 return;  
             }
             button.BackColor = cd.Color;
+        }
+
+        private void Presentbutton_Click(object sender, EventArgs e)
+        {
+            Factory = new PresentFactory
+            {
+                PresentColor = PresentColor1.BackColor,
+                PresentColor2 = PresentColor2.BackColor
+            };
         }
     }
 }
