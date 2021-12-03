@@ -28,9 +28,9 @@ namespace week09
             for (int year = 2005; year <= 2024; year++)
             {
                 //var kezdoEv = 2005;
-                foreach (var item in Population)
+                for (int i = 0; i < Population.Count; i++)
                 {
-
+                    SimStep(year, Population[i]);
                 }
 
                 int nbrOfMales = (from x in Population
@@ -43,6 +43,39 @@ namespace week09
             }
 
         }
+
+        void SimStep(int year, Person p)
+        {
+            if (!p.IsAlive) return;
+
+            int age = year - p.BirthYear;
+            var DeathP = (from x in DeathProbabilities
+                          where x.Age == age && x.Gender == p.Gender
+                          select x.Probability).FirstOrDefault();
+            if (rng.NextDouble() <= DeathP)
+            {
+                p.IsAlive = false;
+            }
+            if (p.IsAlive != true && p.Gender!=Gender.Female)
+            {
+                return;
+            }
+            var BirthP = (from x in BirthProbabilities
+                          where x.Age == age //&& x.Childs == p.NbrOfChildren
+                          select x.Probability).FirstOrDefault();
+            if (rng.NextDouble()<=BirthP)
+            {
+                var newP = new Person()
+                {
+                    BirthYear = year,
+                    NbrOfChildren = 0,
+                    IsAlive = true,
+                    Gender = (Gender)(rng.Next(1, 3))
+                };
+                Population.Add(newP);
+            }
+        }
+
         public List<Person> GetPopulation (string path)
         {
             List<Person> population = new List<Person>();
