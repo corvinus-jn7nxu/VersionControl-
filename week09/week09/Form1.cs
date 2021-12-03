@@ -18,30 +18,38 @@ namespace week09
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
         Random rng = new Random(1234);
+        List<int> fiuk = new List<int>();
+        List<int> lanyok = new List<int>();
         public Form1()
         {
             InitializeComponent();
-            Population = GetPopulation(@"C:\Temp\nép.csv");
+            
+        }
+
+        private void Simulation()
+        {
+            Population = GetPopulation(path.Text);
             BirthProbabilities = GetBirths(@"C:\Temp\születés.csv");
             DeathProbabilities = GetDeaths(@"C:\Temp\halál.csv");
-
-            for (int year = 2005; year <= 2024; year++)
+            for (var year = 2005; year <= yearBox.Value; year++)
             {
                 //var kezdoEv = 2005;
                 for (int i = 0; i < Population.Count; i++)
                 {
                     SimStep(year, Population[i]);
+
                 }
 
                 int nbrOfMales = (from x in Population
-                           where x.Gender == Gender.Male && x.IsAlive
-                           select x).Count();
+                                  where x.Gender == Gender.Male && x.IsAlive
+                                  select x).Count();
                 int nbrOfFemales = (from x in Population
                                     where x.Gender == Gender.Female && x.IsAlive
                                     select x).Count();
                 Console.WriteLine(string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
+                fiuk.Add(nbrOfFemales);
+                lanyok.Add(nbrOfMales);
             }
-
         }
 
         void SimStep(int year, Person p)
@@ -129,6 +137,34 @@ namespace week09
                 }
             }
             return deaths;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            fiuk.Clear();
+            lanyok.Clear();
+            richTextBox1.Clear();
+            Simulation();
+            DisplayResults();
+        }
+        private void DisplayResults()
+        {
+            var counter = 0;
+            for (int i = 2005; i < yearBox.Value; i++)
+            {
+                richTextBox1.AppendText( "Szimulációs év: " + i + Environment.NewLine  + "Fiúk: " + fiuk[counter] + Environment.NewLine + "Lányok: " + lanyok[counter] + Environment.NewLine);
+                counter++;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            //open.ShowDialog();
+            if (open.ShowDialog()==DialogResult.OK)
+            {
+                path.Text = open.FileName;
+            }
         }
     }
 }
