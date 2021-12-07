@@ -22,6 +22,17 @@ namespace week10
             this.Controls.Add(ga);
             //gc.AddPlayer();
             //gc.Start(true);
+            int populationSize = 100;
+            int nbrOfSteps = 10;
+            int nbrOfStepsIncrement = 10;
+            int generation = 1;
+            for (int i = 0; i < populationSize; i++)
+            {
+                gc.AddPlayer(nbrOfSteps);
+                
+            }
+            gc.Start();
+
         }
     }
 }
