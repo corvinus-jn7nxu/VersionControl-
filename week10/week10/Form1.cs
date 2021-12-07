@@ -51,13 +51,15 @@ namespace week10
             var topPerformers = playerList.Take(populationSize / 2).ToList();
 
             var winners = from x in topPerformers
-                          where x.IsWinner
+                          where !x.IsWinner
                           select x;
             if (winners.Count() > 0)
             {
                 winner = winners.FirstOrDefault().Brain.Clone();
                 gc.GameOver -= Gc_GameOver;
+                button1.Visible = true;
                 return;
+                
             }
 
             gc.ResetCurrentLevel();
@@ -75,6 +77,15 @@ namespace week10
                     gc.AddPlayer(b.Mutate());
             }
             gc.Start();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winner.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
     }
 }
